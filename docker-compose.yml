@@ -1,0 +1,11 @@
+version: '3.5'
+services:
+    gitlab-go-import:
+        build:
+            context: .
+        environment:
+            GO_IMPORT_GITLAB_URL: https://gitlab.example.com
+            GO_IMPORT_GITLAB_TOKEN: private-access-token
+        ports:
+          - "8008:8008"
+        restart: unless-stopped
