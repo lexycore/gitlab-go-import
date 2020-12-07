@@ -84,7 +84,7 @@ func (server *Server) successResult(w http.ResponseWriter, project *gitlab.Proje
 	response := fmt.Sprintf(
 		"<html><head><meta name=\"go-import\" content=\"%s git ssh://%s\"/></head></html>\n",
 		webURL,
-		project.SSHURLToRepo,
+		strings.Replace(project.SSHURLToRepo, ":", "/", 1),
 	)
 	server.sendSuccessResult(w, response)
 	return response
