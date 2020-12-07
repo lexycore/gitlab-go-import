@@ -12,7 +12,7 @@ jobs:
     name: Run linters
     runs-on: ubuntu-latest
     env:
-      GOPATH: /home/runner/work/lexycore/github-go-import/go
+      GOPATH: /home/runner/work/gitlab-go-import/gitlab-go-import/go
     steps:
     - uses: actions/checkout@v2
       with:
@@ -20,6 +20,7 @@ jobs:
     - name: Run
       uses: actions-contrib/golangci-lint@v1
       with:
+        golangci_lint_version: v1.33.0
         working-directory: go/src/github.com/lexycore/github-go-import
         args: run --config=go/src/github.com/lexycore/github-go-import/.golangci.yml ./...
 
