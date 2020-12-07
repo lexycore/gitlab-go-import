@@ -1,7 +1,6 @@
 package impl
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/urfave/cli/v2"
@@ -50,7 +49,7 @@ func CreateCLI() *cli.App {
 		}
 
 		server := NewServer(config)
-		log.Printf(fmt.Sprintf("service version: %s", version.Version()))
+		log.Printf("service version: %s", version.Version())
 		if err := server.Serve(); err != nil {
 			return err
 		}

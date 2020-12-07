@@ -103,5 +103,5 @@ func (server *Server) initGitLabClient() error {
 
 func (server *Server) setHandlers() {
 	server.mux = http.NewServeMux()
-	server.mux.HandleFunc("/go-get", server.goGet)
+	server.mux.HandleFunc("/", server.goGet)
 }

@@ -38,16 +38,16 @@ func (server *Server) goGet(w http.ResponseWriter, r *http.Request) {
 	}
 
 	query := r.URL.Query()
-	log.Printf("url: %s", query["url"])
-
-	pathValues, ok := query["url"]
-	if !ok || len(pathValues) < 1 {
-		log.Printf("Wrong parameters: missing `url`")
-		w.WriteHeader(http.StatusBadRequest)
+	goGetValue, ok := query["go-get"]
+	if !ok || len(goGetValue) < 1 {
+		w.WriteHeader(http.StatusNotFound)
 		return
 	}
-	path := strings.ReplaceAll(pathValues[0], "%2F", "/")
+
+	path := strings.ReplaceAll(r.URL.Path, "%2F", "/")
 	path = strings.ReplaceAll(path, "%2f", "/")
+	path = strings.Trim(path, "/")
+	log.Printf("url: %s", path)
 
 	if response, ok2 := getRequest(path); ok2 {
 		server.sendSuccessResult(w, response)
@@ -72,7 +72,7 @@ func (server *Server) goGet(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	server.fallbackRequest(w, pathValues[0])
+	server.fallbackRequest(w, r.RequestURI)
 }
 
 func (server *Server) successResult(w http.ResponseWriter, project *gitlab.Project) string {
