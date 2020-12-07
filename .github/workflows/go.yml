@@ -8,6 +8,21 @@ on:
 
 jobs:
 
+  golangci-lint:
+    name: Run linters
+    runs-on: ubuntu-latest
+    env:
+      GOPATH: /home/runner/work/lexycore/github-go-import/go
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        path: 'go/src/github.com/lexycore/github-go-import'
+    - name: Run
+      uses: actions-contrib/golangci-lint@v1
+      with:
+        working-directory: go/src/github.com/lexycore/github-go-import
+        args: run --config=go/src/github.com/lexycore/github-go-import/.golangci.yml ./...
+
   build:
     name: Build
     runs-on: ubuntu-latest
@@ -23,11 +38,6 @@ jobs:
 
     - name: Get dependencies
       run: go mod download
-      
-    - name: Run golangci-lint
-      uses: actions-contrib/golangci-lint@v1
-      with:
-        golangci_lint_version: v1.33.0
 
     - name: Test
       run: go test -v ./...
