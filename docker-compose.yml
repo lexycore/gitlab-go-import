@@ -4,6 +4,7 @@ services:
         build:
             context: .
         environment:
+            GO_IMPORT_BIND_ADDR: 127.0.0.1:8008
             GO_IMPORT_GITLAB_URL: https://gitlab.example.com
             GO_IMPORT_GITLAB_TOKEN: private-access-token
         ports:
