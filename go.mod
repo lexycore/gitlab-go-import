@@ -1,6 +1,6 @@
 module github.com/lexycore/gitlab-go-import
 
-go 1.14
+go 1.16
 
 require (
 	github.com/hashicorp/go-retryablehttp v0.6.8 // indirect

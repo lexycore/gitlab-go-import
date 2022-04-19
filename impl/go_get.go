@@ -27,6 +27,13 @@ func setRequest(req, res string) {
 	requests.Store(req, res)
 }
 
+func sanitizePath(inPath string) string {
+	path := strings.ReplaceAll(inPath, "%2F", "/")
+	path = strings.ReplaceAll(path, "%2f", "/")
+	path = strings.Trim(path, "/")
+	return path
+}
+
 func (server *Server) goGet(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
 		if r.Method == http.MethodOptions {
@@ -44,9 +51,7 @@ func (server *Server) goGet(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	path := strings.ReplaceAll(r.URL.Path, "%2F", "/")
-	path = strings.ReplaceAll(path, "%2f", "/")
-	path = strings.Trim(path, "/")
+	path := sanitizePath(r.URL.Path)
 	log.Printf("url: %s", path)
 
 	if response, ok2 := getRequest(path); ok2 {
@@ -72,7 +77,7 @@ func (server *Server) goGet(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	server.fallbackRequest(w, r.RequestURI)
+	server.fallbackRequest(w, r.URL.String())
 }
 
 func (server *Server) successResult(w http.ResponseWriter, project *gitlab.Project) string {
@@ -100,7 +105,8 @@ func (server *Server) sendSuccessResult(w http.ResponseWriter, response string) 
 }
 
 func (server *Server) fallbackRequest(w http.ResponseWriter, path string) {
-	fallbackURL := fmt.Sprintf("%s%s?go-get=1", server.config.GitLabURL, path)
+	path = sanitizePath(path)
+	fallbackURL := fmt.Sprintf("%s%s", server.config.GitLabURL, path)
 	log.Printf("sending fallback request to: %s", fallbackURL)
 	resp, err := http.Get(fallbackURL)
 	if err != nil {
